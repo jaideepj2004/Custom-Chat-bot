@@ -1,40 +1,44 @@
-Personal Information Q&A System
+🌟 Overview
 
-A simple Streamlit-based Q&A application that uses a Retrieval-Augmented Generation (RAG) approach to answer questions about the contents of a user-supplied PDF document.
+The Personal Information Q&A System is a web application built with Streamlit that allows you to upload any PDF document and ask questions about its content. It uses a Retrieval-Augmented Generation (RAG) approach to retrieve the most relevant passages and deliver grounded, context-rich answers. Instead of pressing Enter, simply click 🔍 Search to apply your query.
 
-Why RAG?
+✨ Features
 
-Retrieval-Augmented Generation (RAG) combines information retrieval with large-language-model generation to deliver accurate, context-rich answers:
+Feature
 
-Grounded Responses: By retrieving relevant passages directly from your document, the system ensures that answers are based on actual content, minimizing hallucinations.
+Description
 
-Efficiency: Embeddings and nearest-neighbor search quickly identify the most pertinent context, reducing the input size for the generative model.
+📄 PDF Upload
 
-Scalability: RAG architectures can handle large documents by indexing and searching chunks, rather than processing everything at once.
+Upload and process any PDF document via the sidebar.
 
-Flexibility: The retrieved context can be fed into any downstream LLM, enabling further refinement or summarization of the answer. The system extracts sentences from the PDF, embeds them using a pre-trained SentenceTransformer model, and retrieves the most relevant passages in response to a user query.
+📜 Sentence Split
 
-Features
+NLTK’s punkt tokenizer splits text into clean sentences.
 
-PDF Upload: Upload any PDF document via the Streamlit sidebar.
+🤖 Embeddings
 
-Sentence Extraction: Automatically split PDF text into sentences using NLTK.
+all-MiniLM-L6-v2 converts text to semantic vectors.
 
-Embeddings: Encode sentences with the SentenceTransformer (all-MiniLM-L6-v2) model.
+🔍 Similarity
 
-Similarity Search: Compute cosine similarity between user queries and document sentences.
+Cosine similarity finds the most relevant passages.
 
-Interactive UI: Highlight relevant passages with confidence-based color coding.
+🎨 Interactive UI
 
-Table of Contents
+Color-coded relevance with a smooth Streamlit interface.
+
+🛠️ Table of Contents
 
 Prerequisites
 
 Installation
 
-File Structure
+Quick Start
 
 Usage
+
+Architecture
 
 Configuration
 
@@ -44,106 +48,88 @@ License
 
 Acknowledgments
 
-Prerequisites
+📋 Prerequisites
 
 Python 3.7 or later
 
 pip (Python package manager)
 
-Installation
+🔧 Installation
 
-Clone the repository
-
-git clone https://github.com/yourusername/personal-info-qa
+git clone https://github.com/yourusername/personal-info-qa.git
 cd personal-info-qa
 
-Create and activate a virtual environment (optional but recommended)
-
+# (Optional) Create & activate a virtual environment
 python -m venv venv
-source venv/bin/activate     # On macOS/Linux
-venv\Scripts\activate      # On Windows
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate     # Windows
 
-Install dependencies
-
+# Install dependencies
 pip install -r requirements.txt
 
-Note: If you don't have a requirements.txt, install packages manually:
+Note: If you don’t have requirements.txt, install manually:
 
 pip install streamlit nltk sentence-transformers numpy scikit-learn PyPDF2
 
-Download NLTK data
+🚀 Quick Start
 
-The application downloads the required NLTK punkt tokenizer on first run. If you prefer manual download:
+streamlit run app.py
+
+Open your browser at http://localhost:8501
+
+Upload your PDF.
+
+Ask your question and click 🔍 Search to apply.
+
+🤔 Usage
+
+Select and upload your PDF document via the sidebar.
+
+Type your question in the input box.
+
+Click 🔍 Search (don’t press Enter) to retrieve answers.
+
+🤖 Architecture
+
+Model: all-MiniLM-L6-v2 via SentenceTransformers
+
+Tokenizer: NLTK punkt for sentence splitting
+
+Parser: PyPDF2 for PDF text extraction
+
+Similarity: scikit-learn’s cosine_similarity over NumPy arrays
+
+UI: Streamlit for interactive frontend
+
+⚙️ Configuration
+
+Model Selection: Change in personal_rag_system.py:
+
+self.model = SentenceTransformer('your-model-name')
+
+Top-K Results: Adjust top_k in answer_question().
+
+🛠️ Troubleshooting
+
+Empty Output: Ensure PDF is text-based, not scanned.
+
+Slow Embedding: Use smaller docs or lighter models.
+
+NLTK Errors: Download tokenizer manually:
 
 import nltk
 nltk.download('punkt')
 
-File Structure
+📄 License
 
-personal-info-qa/
-├── app.py                     # Streamlit application
-├── personal_rag_system.py     # RAG system implementation
-├── requirements.txt           # Python dependencies
-├── README.md                  # Project documentation
-└── .gitignore                 # Ignore Python artifacts
+Distributed under the MIT License. See LICENSE for details.
 
-Usage
+🙏 Acknowledgments
 
-Run the Streamlit app
+Streamlit
 
-streamlit run app.py
+SentenceTransformers
 
-Upload a PDF
+NLTK
 
-Click on the sidebar upload widget and select a PDF file.
-
-Wait for processing (sentence extraction and embedding).
-
-Ask Questions
-
-Enter a question in the text input field and click Search.
-
-Relevant passages will appear, color-coded by relevance (green/orange/red).
-
-Architecture
-
-Embedding Model: The system uses the pre-trained all-MiniLM-L6-v2 model from the SentenceTransformers library to generate dense semantic embeddings for each sentence.
-
-Text Tokenization: Sentence splitting is handled by NLTK’s punkt tokenizer (downloaded at runtime if necessary).
-
-PDF Parsing: Text extraction from uploaded PDFs is performed with PyPDF2.
-
-Similarity Computation: Cosine similarity between query and sentence embeddings is computed using scikit-learn’s cosine_similarity.
-
-Data Structures: Embeddings and similarity scores are managed using NumPy arrays.
-
-Web Interface: The frontend is built with Streamlit, providing file upload, question input, and result display.
-
-Configuration
-
-Model Selection: By default, the system uses all-MiniLM-L6-v2. To change, modify the SentenceTransformer instantiation in personal_rag_system.py.
-
-Top-K Results: Adjust the top_k parameter in answer_question() if you want more or fewer passages.
-
-Troubleshooting
-
-Blank Output or Errors: Ensure the PDF contains extractable text. Scanned or image-based PDFs may not yield any text.
-
-Slow Performance: Embedding large documents can be time-consuming. Consider splitting PDFs or using a smaller model.
-
-Missing NLTK Data: If you encounter LookupError: punkt not found, download the tokenizer manually (see Installation).
-
-License
-
-This project is released under the MIT License. See LICENSE for details.
-
-Acknowledgments
-
-Streamlit for the interactive UI.
-
-SentenceTransformers for easy access to pre-trained embedding models.
-
-NLTK for text processing utilities.
-
-Made with ❤️ by Jaideep Jaiswal
-
+© 2025 Jaideep Jaiswal. Made with ❤️
